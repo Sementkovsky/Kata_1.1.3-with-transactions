@@ -1,7 +1,39 @@
 package jm.task.core.jdbc;
 
+import jm.task.core.jdbc.model.User;
+import jm.task.core.jdbc.service.UserService;
+import jm.task.core.jdbc.service.UserServiceImpl;
+
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
+
 public class Main {
     public static void main(String[] args) {
-        // реализуйте алгоритм здесь
+
+        User user1 = new User("Isaak", "Asimov", (byte) 56);
+        User user2 = new User("Ray", "Brudberry", (byte) 50);
+        User user3 = new User("Boris", "Strugatskiy", (byte) 49);
+        User user4 = new User("Alexander", "Beljaev", (byte) 44);
+        List<User> userList = new ArrayList<>(Arrays.asList(user1, user2, user3, user4));
+
+        UserService userService = new UserServiceImpl();
+
+        userService.createUsersTable();
+
+        for (User u : userList) {
+            userService.saveUser(u.getName(), u.getLastName(), u.getAge());
+            System.out.println("User с именем – " + u.getName() + " добавлен в базу данных");
+        }
+
+        //  userService.removeUserById(3L);
+
+        userService.getAllUsers().stream().map(User::toString).forEach(System.out::println);
+
+        userService.cleanUsersTable();
+
+        userService.dropUsersTable();
     }
 }
+
+
