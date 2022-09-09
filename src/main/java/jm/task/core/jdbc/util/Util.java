@@ -7,19 +7,24 @@ import java.sql.DriverManager;
 import java.sql.SQLException;
 
 public class Util {
-    // реализуйте настройку соеденения с БД
-    private static String URL = "jdbc:mysql://localhost:3306/kata_db";
+
+    private static final String URL = "jdbc:mysql://localhost:3306/kata_db";
     private static final String USERNAME = "root";
     private static final String PASSWORD = "Futurama";
 
+    private static Connection connection;
 
-    public static Connection getConnection() throws SQLException {
+    public static Connection getConnection() {
 
-        Connection connection;
-        Driver driver = new com.mysql.cj.jdbc.Driver();
-        DriverManager.registerDriver(driver);
 
-        connection = DriverManager.getConnection(URL, USERNAME, PASSWORD);
+        try {
+            Driver driver = new com.mysql.cj.jdbc.Driver();
+            DriverManager.registerDriver(driver);
+            connection = DriverManager.getConnection(URL, USERNAME, PASSWORD);
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
         return connection;
 
     }
