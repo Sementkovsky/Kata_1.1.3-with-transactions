@@ -21,20 +21,13 @@ public class Main {
 
         userService.createUsersTable();
 
-        for (User u : userList) {
-            userService.saveUser(u.getName(), u.getLastName(), u.getAge());
-            System.out.println("User с именем – " + u.getName() + " добавлен в базу данных");
+        for (User user : userList) {
+            userService.saveUser(user.getName(), user.getLastName(), user.getAge());
         }
 
-        //  userService.removeUserById(3L);
-
         userService.getAllUsers().forEach(System.out::println);
-
         userService.cleanUsersTable();
-
         userService.dropUsersTable();
-
-        System.out.println("End");
     }
 }
 
