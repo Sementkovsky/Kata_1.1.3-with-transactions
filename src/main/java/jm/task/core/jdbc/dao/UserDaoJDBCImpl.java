@@ -124,8 +124,8 @@ public class UserDaoJDBCImpl implements UserDao {
     public void cleanUsersTable() {
         try (Statement statement = connection.createStatement()) {
             connection.setAutoCommit(false);
-            statement.executeUpdate("TRUNCATE TABLE users");
-            connection.commit();
+            statement.executeUpdate("DELETE FROM users");
+                    connection.commit();
         } catch (SQLException e) {
             System.out.println("Не удалось очистить таблицу");
             e.printStackTrace();
