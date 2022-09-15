@@ -86,7 +86,6 @@ public class UserDaoJDBCImpl implements UserDao {
             preparedStatement.executeUpdate();
             connection.commit();
         } catch (SQLException e) {
-
             System.out.println("Не удалось удалить пользователя из таблицы");
             e.printStackTrace();
             if (connection != null) {
