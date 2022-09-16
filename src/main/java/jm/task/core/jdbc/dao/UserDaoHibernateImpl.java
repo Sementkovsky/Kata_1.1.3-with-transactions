@@ -5,8 +5,6 @@ import jm.task.core.jdbc.util.Util;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.Transaction;
-import javax.persistence.criteria.CriteriaBuilder;
-import javax.persistence.criteria.CriteriaQuery;
 import java.util.List;
 
 public class UserDaoHibernateImpl implements UserDao {
@@ -21,12 +19,10 @@ public class UserDaoHibernateImpl implements UserDao {
         Transaction transaction = null;
 
         try (Session session = sessionFactory.openSession()) {
-            final String sql1 = "DROP TABLE IF EXISTS users";
-            final String sql2 = "CREATE TABLE users (user_id INT NOT NULL AUTO_INCREMENT PRIMARY KEY, first_name VARCHAR(45) NOT NULL, second_name VARCHAR(45) NOT NULL, age INT NOT NULL )";
+            final String sql = "CREATE TABLE IF NOT EXISTS users (user_id INT NOT NULL AUTO_INCREMENT PRIMARY KEY, first_name VARCHAR(45) NOT NULL, second_name VARCHAR(45) NOT NULL, age INT NOT NULL )";
 
             transaction = session.beginTransaction();
-            session.createSQLQuery(sql1).executeUpdate();
-            session.createSQLQuery(sql2).executeUpdate();
+            session.createSQLQuery(sql).executeUpdate();
             transaction.commit();
         } catch (Exception exception) {
             if (transaction != null) {
@@ -96,11 +92,11 @@ public class UserDaoHibernateImpl implements UserDao {
 
     @Override
     public List<User> getAllUsers() {
-        Session session = sessionFactory.openSession();
-        CriteriaBuilder builder = session.getCriteriaBuilder();
-        CriteriaQuery<User> criteria = builder.createQuery(User.class);
-        criteria.from(User.class);
-        return session.createQuery(criteria).getResultList();
+        try (Session session = sessionFactory.openSession()) {
+
+            String hql = "From " + User.class.getSimpleName();
+            return session.createQuery(hql, User.class).list();
+        }
     }
 
     @Override
